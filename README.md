@@ -152,4 +152,4 @@ project
 1. Clone or download it.
 2. Make sure you met all the requirements listed above.
 3. Airflow Configuration.
-4. Open [localhost:8080](localhost:8080) and run `main_sparkify_pipeline` DAG.
+4. Open [localhost:8080](localhost:8080) and run `udac_example_dag` DAG.
