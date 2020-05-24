@@ -139,10 +139,12 @@ project
 3. Python 3rd party libraries (make sure you have virtual environment activated): 
 
 - [boto3](https://pypi.org/project/boto3/)
-- [psycopg2](https://pypi.org/project/psycopg2/l)
+- [botocore](https://pypi.org/project/botocore/)
+- [psycopg2](https://pypi.org/project/psycopg2/)
 
 ```bash
 (venv) pip install boto3
+(venv) pip install botocore
 (venv) pip install psycopg2
 ```
 
