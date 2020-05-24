@@ -54,36 +54,66 @@ stage_songs_to_redshift = StageToRedshiftOperator(
 
 load_songplays_table = LoadFactOperator(
     task_id='Load_songplays_fact_table',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='songplays',
+    sql=SqlQueries.songplay_table_insert
 )
 
 load_user_dimension_table = LoadDimensionOperator(
     task_id='Load_user_dim_table',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='users',
+    sql=SqlQueries.user_table_insert
 )
 
 load_song_dimension_table = LoadDimensionOperator(
     task_id='Load_song_dim_table',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='songs',
+    sql=SqlQueries.song_table_insert
 )
 
 load_artist_dimension_table = LoadDimensionOperator(
     task_id='Load_artist_dim_table',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='artists',
+    sql=SqlQueries.artist_table_insert
 )
 
 load_time_dimension_table = LoadDimensionOperator(
     task_id='Load_time_dim_table',
-    dag=dag
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='time',
+    sql=SqlQueries.time_table_insert
 )
 
-run_quality_checks = DataQualityOperator(
-    task_id='Run_data_quality_checks',
-    dag=dag
+run_quality_check_songplays = DataQualityOperator(
+    task_id='Run_data_quality_checks_songplays',
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='songplays',
+    column='user_id',
+    rule='is not null',
+    treshold=0
+)
+
+run_quality_check_users = DataQualityOperator(
+    task_id='Run_data_quality_checks_users',
+    dag=dag,
+    redshift_conn_id='redshift',
+    table_name='users',
+    column='first_name',
+    rule='is not null',
+    treshold=5
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)
 
 start_operator >> [stage_songs_to_redshift, stage_events_to_redshift] >> load_songplays_table
-load_songplays_table >> [load_song_dimension_table, load_user_dimension_table, load_artist_dimension_table, load_time_dimension_table] >> run_quality_checks
-run_quality_checks >> end_operator
+load_songplays_table >> [load_song_dimension_table, load_user_dimension_table, load_artist_dimension_table, load_time_dimension_table] >> [run_quality_check_songplays, run_quality_check_users]
+[run_quality_check_songplays, run_quality_check_users] >> end_operator
