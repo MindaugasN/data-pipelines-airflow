@@ -110,8 +110,7 @@ Using Apache Airflow we should build Data pipelines that are be dynamic and buil
 ```
 project
 |-- dags
-    |-- log-data.zip
-    |-- song-data.zip
+    |-- etl.py
 |-- plugins
     |-- __init__.py
     |-- helpers
@@ -136,7 +135,12 @@ project
 - [pip](https://pip.pypa.io/en/stable/installing/)
 
 2. Running installation of Airflow (follow steps at the top of README)
-3. Python 3rd party libraries (make sure you have virtual environment activated): 
+
+3. AWS account:
+- [AWS credentials](https://aws.amazon.com/getting-started/)
+- [Redshift cluster](https://docs.aws.amazon.com/redshift/latest/gsg/getting-started.html)
+
+4. Python 3rd party libraries (make sure you have virtual environment activated): 
 
 - [boto3](https://pypi.org/project/boto3/)
 - [botocore](https://pypi.org/project/botocore/)
@@ -148,10 +152,10 @@ project
 (venv) pip install psycopg2
 ```
 
-
 ## How to use this repo?
 
 1. Clone or download it.
 2. Make sure you met all the requirements listed above.
-3. Airflow Configuration.
-4. Open [localhost:8080](localhost:8080) and run `udac_example_dag` DAG.
+3. Create `redshift` and `aws_credentials` in Airflow [connections tab](http://localhost:8080/admin/connection/)
+4. Run `create_table.sql` script and create tables. (It can be done via [query editor](https://docs.aws.amazon.com/redshift/latest/mgmt/query-editor.html))
+4. Open [localhost:8080](localhost:8080) and run `main_etl` DAG.

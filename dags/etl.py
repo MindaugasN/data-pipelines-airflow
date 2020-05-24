@@ -22,7 +22,7 @@ default_args = {
     'email_on_retry': False
 }
 
-dag = DAG('udac_example_dag',
+dag = DAG('main_etl',
           default_args=default_args,
           description='Load and transform data in Redshift with Airflow',
           schedule_interval='0 * * * *',
